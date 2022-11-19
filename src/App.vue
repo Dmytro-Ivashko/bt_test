@@ -1,5 +1,22 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <HomeView />
+  </div>
 </template>
+<script>
+import HomeView from "@/views/HomeView.vue";
 
-<style lang="scss"></style>
+export default {
+  components: {
+    HomeView,
+  },
+};
+</script>
+<style lang="scss">
+@import "assets/scss/app.scss";
+
+#app {
+  background-color: #f3f7fa;
+  height: 100%;
+}
+</style>
