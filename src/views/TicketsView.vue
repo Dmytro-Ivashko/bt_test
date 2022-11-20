@@ -1,9 +1,11 @@
 <template>
   <div class="wrapper">
     <header>
-      <img src="@/assets/imgs/logo.png" alt="Site logo" />
+      <div class="logo-wraper">
+        <img class="logo" src="@/assets/imgs/logo.png" alt="Site logo" />
+      </div>
     </header>
-    <aside>
+    <main>
       <TransferFilter :active-transfer="activeTransfer" />
       <section>
         <TabsFilter :active-tab="activeTab" />
@@ -12,7 +14,7 @@
           Показать еще 5 билетов!
         </button>
       </section>
-    </aside>
+    </main>
   </div>
 </template>
 
@@ -47,7 +49,7 @@ export default {
     this.$store.dispatch("fetchTickets");
   },
   computed: {
-    tickets: function () {
+    tickets() {
       const sortedTickets = [...this.$store.getters.getTickets].sort((a, b) => {
         const sortType = this.activeTab;
         switch (sortType) {
@@ -86,11 +88,29 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-
-aside {
+header {
   display: flex;
   justify-content: center;
-  // min-height: 100%;
+  align-items: center;
+  flex-direction: column;
+  height: 60px;
+  margin: 50px 0;
+}
+.logo-wraper {
+  width: 60px;
+  height: 60px;
+  border-style: solid;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: 0 0;
+}
+main {
+  display: flex;
+  justify-content: center;
 }
 section {
   display: flex;
@@ -98,14 +118,7 @@ section {
   justify-content: flex-start;
   align-items: center;
 }
-header {
-  display: flex;
-  justify-content: center;
-  img {
-    width: 60px;
-    padding: 60px 0;
-  }
-}
+
 button {
   width: 502px;
   height: 50px;
