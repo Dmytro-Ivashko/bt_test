@@ -1,46 +1,68 @@
 <template>
   <div class="filter-wrapper">
     <div class="filter-header">Количество пересадок</div>
-    <div class="filter-list" v-for="tab in tabs" :key="tab.id">
-      <input type="checkbox" :id="tab.id" />
-      <label :for="tab.id"> <span></span> {{ tab.label }} </label>
+    <div class="filter-list" v-for="transfer in transfers" :key="transfer.id">
+      <input
+        type="checkbox"
+        :id="transfer.id"
+        :value="transfer.id"
+        v-model="selectedFiler"
+      />
+      <label :for="transfer.id"> <span></span> {{ transfer.label }} </label>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "TabsFilter",
-  props: {},
+  name: "TransferFilter",
+  props: {
+    activeTransfer: {
+      type: Array,
+      default: () => ["all"],
+    },
+  },
   data() {
     return {
-      tabs: [
+      selectedFiler: ["all"],
+      transfers: [
         {
           id: "all",
           label: "Все",
-          active: true,
         },
         {
           id: "without",
           label: "Без пересадок",
-          active: false,
         },
         {
           id: "one_transfer",
           label: "1 пересадка",
-          active: false,
         },
         {
           id: "two_transfer",
           label: "2 пересадки",
-          active: false,
         },
         {
           id: "three_transfer",
           label: "3 пересадки",
-          active: false,
         },
       ],
     };
+  },
+  watch: {
+    selectedFiler(newFilter, oldFilter) {
+      let newElement = newFilter.filter((x) => !oldFilter.includes(x));
+      console.log(newElement);
+      if (newElement.includes("without")) this.selectedFiler = newElement;
+      if (newElement.includes("all"))
+        this.selectedFiler = [
+          "all",
+          "without",
+          "one_transfer",
+          "two_transfer",
+          "three_transfer",
+        ];
+      this.$parent.$emit("change-transfer", this.selectedFiler);
+    },
   },
 };
 </script>

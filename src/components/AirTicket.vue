@@ -25,13 +25,13 @@
       <div class="segment-wraper">
         <div class="segment-header">В пути</div>
         <div class="segment-data">
-          {{ segment.origin }} - {{ segment.destination }}
+          {{ getTimeFromMins(segment.duration) }}
         </div>
       </div>
       <div class="segment-wraper">
         <div class="segment-header">пересадки</div>
         <div class="segment-data">
-          <div v-for="stop in segment.stops" :key="stop">{{ stop }}</div>
+          <span v-for="stop in segment.stops" :key="stop">{{ stop }},</span>
         </div>
       </div>
     </div>
@@ -39,29 +39,16 @@
 </template>
 <script>
 export default {
+  props: ["ticket"],
   data() {
-    return {
-      ticket: {
-        price: 54347,
-        carrier: "S7",
-        segments: [
-          {
-            origin: "MOW",
-            destination: "HKT",
-            date: "2022-11-27T12:59:00.000Z",
-            stops: ["HKG"],
-            duration: 1347,
-          },
-          {
-            origin: "HKT",
-            destination: "MOW",
-            date: "2022-12-17T00:06:00.000Z",
-            stops: ["AUH"],
-            duration: 1980,
-          },
-        ],
-      },
-    };
+    return {};
+  },
+  methods: {
+    getTimeFromMins(mins) {
+      let hours = Math.trunc(mins / 60);
+      let minutes = mins % 60;
+      return `${hours} ч ${minutes} м`;
+    },
   },
 };
 </script>

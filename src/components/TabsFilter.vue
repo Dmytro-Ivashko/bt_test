@@ -2,9 +2,10 @@
   <div class="tab-wrapper">
     <div
       class="tab"
-      :class="{ active: tab.active }"
+      :class="{ active: tab.id === activeTab }"
       v-for="tab in tabs"
       :key="tab.id"
+      @click="$parent.$emit('change-tab', tab.id)"
     >
       {{ tab.label }}
     </div>
@@ -13,24 +14,26 @@
 <script>
 export default {
   name: "TabsFilter",
-  props: {},
+  props: {
+    activeTab: {
+      type: String,
+      default: "cheapest",
+    },
+  },
   data() {
     return {
       tabs: [
         {
           id: "cheapest",
           label: "Самый дешевый",
-          active: true,
         },
         {
           id: "fastest",
           label: "Самый быстрый",
-          active: false,
         },
         {
           id: "optimal",
           label: "Оптимальный",
-          active: false,
         },
       ],
     };
@@ -60,6 +63,7 @@ export default {
     border: solid 1px #dfe5ec;
     background-color: #ffffff;
     width: 100%;
+    cursor: pointer;
   }
   .tab:first-child {
     border-top-left-radius: 5px;
