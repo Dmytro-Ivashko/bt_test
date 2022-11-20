@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div>
     <header>
       <div class="logo-wraper">
         <img class="logo" src="@/assets/imgs/logo.png" alt="Site logo" />
@@ -83,16 +83,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 header {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   height: 60px;
   margin: 50px 0;
 }
@@ -107,6 +101,7 @@ header {
   height: 100%;
   object-fit: fill;
   object-position: 0 0;
+  transform: scale(1.4);
 }
 main {
   display: flex;
