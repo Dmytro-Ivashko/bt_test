@@ -19,7 +19,7 @@
           {{ segment.origin }} - {{ segment.destination }}
         </div>
         <div class="segment-data">
-          {{ segment.origin }} - {{ segment.destination }}
+          {{ getTime(segment.date, segment.duration) }}
         </div>
       </div>
       <div class="segment-wraper">
@@ -29,9 +29,15 @@
         </div>
       </div>
       <div class="segment-wraper">
-        <div class="segment-header">пересадки</div>
+        <div class="segment-header">
+          <span v-if="!segment.stops.length">нет пересадок</span>
+          <span v-else-if="segment.stops.length === 1">1 пересадка</span>
+          <span v-else> {{ segment.stops.length }} пересадки</span>
+        </div>
         <div class="segment-data">
-          <span v-for="stop in segment.stops" :key="stop">{{ stop }},</span>
+          <span v-for="(stop, index) in segment.stops" :key="stop"
+            >{{ stop }}<span v-if="index !== segment.stops.length - 1">, </span>
+          </span>
         </div>
       </div>
     </div>
@@ -49,16 +55,28 @@ export default {
       let minutes = mins % 60;
       return `${hours} ч ${minutes} м`;
     },
+    getTime(timeOut, flyMin) {
+      const getTimeStampOut = new Date(timeOut).getTime() / 1000;
+      const getTimeStampIn = getTimeStampOut + flyMin * 60;
+      return `${new Date(getTimeStampOut).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })} - ${new Date(getTimeStampIn).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .ticket-wrapper {
+  box-sizing: border-box;
   width: 502px;
   height: 184px;
   border-radius: 5px;
-  padding: 20px;
+  padding: 10px;
   margin: 10px;
   background-color: #ffffff;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
@@ -66,7 +84,8 @@ export default {
 .ticket-header {
   display: flex;
   justify-content: space-between;
-  margin: 10px;
+  padding: 10px;
+  height: 36px;
   .ticket-price {
     color: #2196f3;
     font-family: "Open Sans";
@@ -75,6 +94,9 @@ export default {
     font-size: 24px;
     line-height: 24px;
   }
+  img {
+    height: 36px;
+  }
 }
 .ticket-segments {
   display: flex;
@@ -82,7 +104,12 @@ export default {
   .segment-wraper {
     display: flex;
     flex-direction: column;
+    flex-basis: 33.33%;
+
     margin: 10px;
+  }
+  .segment-wraper:last-child {
+    margin-top: 10px;
   }
   .segment-header {
     font-family: "Open Sans";

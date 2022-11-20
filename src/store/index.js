@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { findMinDuraction, findTransfers } from "@/utilits/methods";
 
 Vue.use(Vuex);
 
@@ -22,7 +23,19 @@ export default new Vuex.Store({
         const response = await fetch(
           `https://front-test.dev.aviasales.ru/tickets?searchId=${searchId}`
         ).then((response) => response.json());
-        commit("FETCH_SUCCESS", response.tickets);
+
+        const tickets = response.tickets.map((ticket) => {
+          const minDuraction = findMinDuraction(ticket);
+          const optimalRatio = ticket.price / minDuraction;
+          const transfers = findTransfers(ticket);
+          return {
+            ...ticket,
+            minDuraction,
+            optimalRatio,
+            transfers,
+          };
+        });
+        commit("FETCH_SUCCESS", tickets);
       } catch (e) {
         commit("FETCH_ERROR");
       }

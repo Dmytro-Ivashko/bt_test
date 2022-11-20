@@ -1,14 +1,19 @@
 <template>
   <div class="filter-wrapper">
     <div class="filter-header">Количество пересадок</div>
-    <div class="filter-list" v-for="transfer in transfers" :key="transfer.id">
+    <div
+      class="filter-list"
+      v-for="filter in filters"
+      :key="filter.id"
+      @click.prevent="setFilter(filter.id)"
+    >
       <input
         type="checkbox"
-        :id="transfer.id"
-        :value="transfer.id"
+        :id="filter.id"
+        :value="filter.id"
         v-model="selectedFiler"
       />
-      <label :for="transfer.id"> <span></span> {{ transfer.label }} </label>
+      <label :for="filter.id"> <span></span> {{ filter.label }} </label>
     </div>
   </div>
 </template>
@@ -18,49 +23,52 @@ export default {
   props: {
     activeTransfer: {
       type: Array,
-      default: () => ["all"],
+      default: () => [],
     },
   },
   data() {
     return {
-      selectedFiler: ["all"],
-      transfers: [
+      selectedFiler: [],
+      filters: [
         {
-          id: "all",
+          id: -1,
           label: "Все",
         },
         {
-          id: "without",
+          id: 0,
           label: "Без пересадок",
         },
         {
-          id: "one_transfer",
+          id: 1,
           label: "1 пересадка",
         },
         {
-          id: "two_transfer",
+          id: 2,
           label: "2 пересадки",
         },
         {
-          id: "three_transfer",
+          id: 3,
           label: "3 пересадки",
         },
       ],
     };
   },
-  watch: {
-    selectedFiler(newFilter, oldFilter) {
-      let newElement = newFilter.filter((x) => !oldFilter.includes(x));
-      console.log(newElement);
-      if (newElement.includes("without")) this.selectedFiler = newElement;
-      if (newElement.includes("all"))
-        this.selectedFiler = [
-          "all",
-          "without",
-          "one_transfer",
-          "two_transfer",
-          "three_transfer",
-        ];
+  methods: {
+    setFilter(id) {
+      const isSelected = this.selectedFiler.includes(id);
+      if (isSelected && id !== -1) {
+        this.selectedFiler = this.selectedFiler.filter(
+          (el) => el !== id && el !== -1
+        );
+      }
+      if (!isSelected) {
+        this.selectedFiler = [...this.selectedFiler, id];
+      }
+      if (this.selectedFiler.length === this.filters.length - 1 || id === -1) {
+        this.selectedFiler = this.filters.map((el) => el.id);
+      }
+      if (isSelected && id === -1) this.selectedFiler = [];
+
       this.$parent.$emit("change-transfer", this.selectedFiler);
     },
   },
@@ -68,14 +76,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .filter-wrapper {
+  display: flex;
+  flex-direction: column;
   width: 232px;
   height: 252px;
   background: #ffffff;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  // padding: 20px;
+  margin-right: 10px;
 }
 .filter-header {
   font-family: "Open Sans";
@@ -86,16 +94,27 @@ export default {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #4a4a4a;
-  padding: 20px 0 0 20px;
+  padding: 20px;
+  padding-bottom: 10px;
 }
 .filter-list {
-  text-align: center;
-  display: inline-block;
+  display: flex;
+  padding: 10px;
+}
+.filter-list:last-child {
+  padding-bottom: 20px;
+}
+.filter-list:hover {
+  background-color: #f1fcff;
+  cursor: pointer;
 }
 label {
   display: flex;
   align-items: center;
   position: relative;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
   cursor: pointer;
   font-family: "Open Sans";
   font-style: normal;
@@ -103,14 +122,12 @@ label {
   font-size: 13px;
   line-height: 20px;
   color: #4a4a4a;
-  padding-left: 20px;
 }
-.filter-list:hover {
-  background-color: #f1fcff;
-  cursor: pointer;
-}
+
 input {
   visibility: hidden;
+  width: 0;
+  height: 0;
 }
 
 label > span {
@@ -121,6 +138,7 @@ label > span {
   border: 1px solid #9abbce;
   margin-right: 10px;
   border-radius: 2px;
+  box-sizing: border-box;
 }
 
 input:checked + label > span {
@@ -131,7 +149,7 @@ input:checked + label > span::before {
   content: "";
   position: absolute;
   top: 8px;
-  left: 25px;
+  left: 5px;
   border-right: 3px solid transparent;
   border-bottom: 3px solid transparent;
   transform: rotate(45deg);

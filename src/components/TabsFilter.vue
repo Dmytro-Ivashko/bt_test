@@ -42,13 +42,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .tab-wrapper {
+  box-sizing: border-box;
   width: 502px;
   height: 50px;
   border-radius: 5px;
   display: flex;
-  // justify-content: space-around;
-  margin-left: 23px;
+  margin-bottom: 10px;
   .tab {
+    width: 100%;
     font-family: "Open Sans";
     font-style: normal;
     font-weight: 600;
@@ -62,7 +63,6 @@ export default {
     color: #4a4a4a;
     border: solid 1px #dfe5ec;
     background-color: #ffffff;
-    width: 100%;
     cursor: pointer;
   }
   .tab:first-child {
@@ -75,16 +75,6 @@ export default {
   }
   .active {
     background: #2196f3;
-    font-family: "Open Sans";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
     color: #ffffff;
   }
 }

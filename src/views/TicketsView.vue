@@ -7,11 +7,7 @@
       <TransferFilter :active-transfer="activeTransfer" />
       <section>
         <TabsFilter :active-tab="activeTab" />
-        <AirTicket
-          v-for="ticket in tickets"
-          :key="ticket.price"
-          :ticket="ticket"
-        />
+        <AirTicket v-for="(ticket, i) in tickets" :key="i" :ticket="ticket" />
         <button v-if="tickets.length" @click="addMore()">
           Показать еще 5 билетов!
         </button>
@@ -36,7 +32,7 @@ export default {
   data() {
     return {
       activeTab: "cheapest",
-      activeTransfer: ["all"],
+      activeTransfer: [],
       toShow: 5,
     };
   },
@@ -53,12 +49,29 @@ export default {
   },
   computed: {
     tickets: function () {
-      return [...this.$store.getters.getTickets]
-        .sort((a, b) => {
-          return b.price - a.price;
-        })
-        .slice(0)
-        .slice(-this.toShow);
+      const sortedTickets = [...this.$store.getters.getTickets].sort((a, b) => {
+        const sortType = this.activeTab;
+        switch (sortType) {
+          case "fastest":
+            return a.minDuraction - b.minDuraction;
+          case "optimal":
+            return a.optimalRatio - b.optimalRatio;
+          default:
+            return a.price - b.price;
+        }
+      });
+      const showAll =
+        this.activeTransfer.includes(-1) || !this.activeTransfer.length;
+      const filteredTickets = showAll
+        ? sortedTickets
+        : sortedTickets.filter((ticket) => {
+            let newElement = ticket.transfers.filter((x) =>
+              this.activeTransfer.includes(x)
+            );
+            return newElement.length;
+          });
+
+      return [...filteredTickets].slice(0, this.toShow);
     },
   },
   methods: {
@@ -78,12 +91,12 @@ export default {
 aside {
   display: flex;
   justify-content: center;
-  padding: 0 103px;
+  // min-height: 100%;
 }
 section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 header {

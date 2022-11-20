@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <HomeView />
+    <TicketsView />
   </div>
 </template>
 <script>
-import HomeView from "@/views/HomeView.vue";
+import TicketsView from "@/views/TicketsView.vue";
 
 export default {
   components: {
-    HomeView,
+    TicketsView,
   },
 };
 </script>
@@ -17,6 +17,5 @@ export default {
 
 #app {
   background-color: #f3f7fa;
-  height: 100%;
 }
 </style>
