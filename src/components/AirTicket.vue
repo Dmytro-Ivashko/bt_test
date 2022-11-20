@@ -1,7 +1,9 @@
 <template>
   <div class="ticket-wrapper">
     <div class="ticket-header">
-      <div class="ticket-price">{{ ticket.price }} P</div>
+      <div class="ticket-price">
+        {{ ticket.price.toLocaleString() }} &#8381;
+      </div>
       <div class="company-logo">
         <img
           :src="`//pics.avs.io/99/36/${ticket.carrier}.png`"
