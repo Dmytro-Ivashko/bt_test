@@ -60,10 +60,10 @@ export default {
     getTime(timeOut, flyMin) {
       const getTimeStampOut = new Date(timeOut).getTime() / 1000;
       const getTimeStampIn = getTimeStampOut + flyMin * 60;
-      return `${new Date(getTimeStampOut).toLocaleTimeString("ru-RU", {
+      return `${new Date(getTimeStampOut * 1000).toLocaleTimeString("ru-RU", {
         hour: "2-digit",
         minute: "2-digit",
-      })} - ${new Date(getTimeStampIn).toLocaleTimeString("ru-RU", {
+      })} - ${new Date(getTimeStampIn * 1000).toLocaleTimeString("ru-RU", {
         hour: "2-digit",
         minute: "2-digit",
       })}`;
