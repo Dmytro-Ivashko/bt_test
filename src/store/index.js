@@ -15,7 +15,7 @@ export default new Vuex.Store({
     getTickets: (state) => state.tickets.data,
   },
   actions: {
-    async fetchTickets({ commit }) {
+    async fetchTickets({ commit, dispatch }) {
       try {
         const { searchId } = await fetch(
           "https://front-test.dev.aviasales.ru/search"
@@ -38,6 +38,7 @@ export default new Vuex.Store({
         commit("FETCH_SUCCESS", tickets);
       } catch (e) {
         commit("FETCH_ERROR");
+        dispatch("fetchTickets");
       }
     },
   },
@@ -47,7 +48,9 @@ export default new Vuex.Store({
       state.tickets.data = resp;
     },
     FETCH_ERROR(state) {
-      console.log("error");
+      console.warn(
+        "Some error. Don't worry we fetch new tickets for you. Enjoy!"
+      );
       state.tickets.status = "error";
       state.tickets.data = [];
     },

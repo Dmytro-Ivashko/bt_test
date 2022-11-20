@@ -20,7 +20,6 @@
 import AirTicket from "@/components/AirTicket.vue";
 import TabsFilter from "@/components/TabsFilter.vue";
 import TransferFilter from "@/components/TransferFilter.vue";
-// import { mapGetters } from "vuex";
 
 export default {
   name: "HomeView",

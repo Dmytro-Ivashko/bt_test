@@ -15,7 +15,7 @@ export default {
 <style lang="scss">
 @import "assets/scss/app.scss";
 
-#app {
+body {
   background-color: #f3f7fa;
 }
 </style>
